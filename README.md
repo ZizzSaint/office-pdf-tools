@@ -10,7 +10,7 @@
 <p align="left">
   <a href="https://github.com/ZizzSaint/office-pdf-tools/actions/workflows/ci.yml"><img alt="CI" src="https://github.com/ZizzSaint/office-pdf-tools/actions/workflows/ci.yml/badge.svg"></a>
   <img alt="license" src="https://img.shields.io/badge/license-MIT-blue">
-  <img alt="node" src="https://img.shields.io/badge/node-%3E%3D18.17-brightgreen">
+  <img alt="node" src="https://img.shields.io/badge/node-%3E%3D22.13-brightgreen">
   <img alt="office" src="https://img.shields.io/badge/Office-Word%20%7C%20Excel%20%7C%20PowerPoint-d83b01">
   <img alt="tests" src="https://img.shields.io/badge/tests-32%20passed-success">
 </p>
@@ -63,7 +63,7 @@
 
 ### 1. 环境要求
 
-- **Node.js ≥ 18.17**（自带 `fetch`/`FormData`）
+- **Node.js ≥ 22.13**（pdf.js 6 的硬性要求；Node 20 及更早版本无法解析 PDF）
 - **Windows / macOS / Linux** 均可运行服务；Office 加载项桌面端以 Windows 为主
 - **Office → PDF 引擎**（二选一，服务启动时会自动探测并在“设置”页展示）：
   - **Microsoft Office 桌面版**（Windows，推荐）：走 COM 自动化，保真度与 Office 原生导出一致

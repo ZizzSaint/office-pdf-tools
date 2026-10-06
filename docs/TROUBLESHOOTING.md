@@ -31,6 +31,17 @@ curl -k https://localhost:3000/api/health     # 应返回 {"ok":true,...}
 - 端口不一致 → 设置页里改“服务地址”，或 `npm run set:port`
 - 公司代理拦截 localhost → 在代理例外中加入 `localhost;127.0.0.1`
 
+### 启动即报“本项目需要 Node >= 22.13”
+
+`pdfjs-dist` 6.x 的硬性要求（`engines: node >= 22.13`）。请升级 Node：
+
+```bash
+nvm install 22 && nvm use 22      # 或 fnm / 官网安装包
+node -v
+```
+
+低版本 Node 下 `npm install` 会有 EBADENGINE 警告，且 PDF 解析会失败（Office → PDF 仍可用，因为走外部引擎）。
+
 ## 转换相关
 
 ### 提示“没有可用的 Office → PDF 转换引擎”

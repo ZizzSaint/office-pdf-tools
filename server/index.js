@@ -23,7 +23,17 @@ async function httpsOptions() {
   }
 }
 
+/** pdfjs-dist v6 要求 Node >= 22.13，提前给出明确提示而不是让 PDF 解析莫名失败。 */
+function assertNodeVersion() {
+  const [major, minor] = process.versions.node.split(".").map(Number);
+  if (major > 22 || (major === 22 && minor >= 13)) return;
+  log.error(`当前 Node.js 版本为 ${process.versions.node}，本项目需要 Node >= 22.13（pdf.js 6 的要求）。`);
+  log.error("请升级 Node.js：https://nodejs.org/  或用 nvm/fnm 安装 LTS 版本后重试。");
+  process.exit(1);
+}
+
 async function main() {
+  assertNodeVersion();
   await ensureDir(config.outputDir);
   await ensureDir(config.tmpDir);
 
