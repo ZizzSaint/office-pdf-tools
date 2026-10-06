@@ -8,6 +8,7 @@
 </p>
 
 <p align="left">
+  <a href="https://github.com/ZizzSaint/office-pdf-tools/actions/workflows/ci.yml"><img alt="CI" src="https://github.com/ZizzSaint/office-pdf-tools/actions/workflows/ci.yml/badge.svg"></a>
   <img alt="license" src="https://img.shields.io/badge/license-MIT-blue">
   <img alt="node" src="https://img.shields.io/badge/node-%3E%3D18.17-brightgreen">
   <img alt="office" src="https://img.shields.io/badge/Office-Word%20%7C%20Excel%20%7C%20PowerPoint-d83b01">
