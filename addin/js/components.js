@@ -169,9 +169,7 @@ export function progressFor(root) {
     },
     set(ratio, label) {
       const pct = Math.max(0, Math.min(1, ratio || 0));
-      if (bar) bar.style.setProperty("--p", String(pct));
-      if (bar) bar.firstElementChild;
-      if (bar) bar.style.background = `linear-gradient(90deg, var(--accent) ${pct * 100}%, rgba(127,127,127,.22) ${pct * 100}%)`;
+      bar?.style.setProperty("--p", String(pct));
       if (text) text.textContent = `${Math.round(pct * 100)}%  ${label || ""}`;
     },
     hide() { root.classList.add("hidden"); },

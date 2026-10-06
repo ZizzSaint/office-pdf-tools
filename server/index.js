@@ -2,10 +2,10 @@
 /** 服务入口。 */
 import http from "node:http";
 import https from "node:https";
-import { config, describeConfig } from "./config.js";
+import { config } from "./config.js";
 import { createApp } from "./app.js";
 import { log } from "./lib/logger.js";
-import { ensureDir, exists } from "./lib/paths.js";
+import { ensureDir } from "./lib/paths.js";
 import { detectEngines, logEngineSummary } from "./lib/engines/detect.js";
 import { jobStore } from "./lib/jobs.js";
 import { cleanupRegistry } from "./lib/registry.js";
@@ -74,8 +74,6 @@ async function main() {
       process.platform === "win32" ? ["/c", "start", "", base] : [base], { timeoutMs: 5000 }).catch(() => {});
   }
 
-  void describeConfig;
-  void exists;
   return server;
 }
 

@@ -16,7 +16,7 @@
     try {
       if (Office.context?.ui?.displayDialogAsync) {
         Office.context.ui.displayDialogAsync(
-          "https://localhost:3000/taskpane.html",
+          new URL("taskpane.html", window.location.href).href,
           { height: 70, width: 30, displayInIframe: true },
         );
       }

@@ -1,5 +1,5 @@
 /** 「设置」面板。 */
-import { api, getBaseUrl, setBaseUrl, triggerDownload } from "../api.js";
+import { api, getBaseUrl, setBaseUrl } from "../api.js";
 import { $, toast } from "../components.js";
 import { t, setLang, getLang } from "../i18n.js";
 import { officeState, openExternal } from "../office-bridge.js";
@@ -113,4 +113,4 @@ export function initLangToggle() {
   });
 }
 
-export { triggerDownload };
+

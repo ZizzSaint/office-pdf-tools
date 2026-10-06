@@ -185,6 +185,19 @@ office-pdf-tools/
 - “打开文件/文件夹”接口只允许操作输出目录、临时目录与项目目录内的路径。
 - 上传大小默认上限 300 MB（`MAX_UPLOAD_MB` 可调）。
 
+## 依赖与安全审计
+
+`npm audit` 目前会报告 7 条告警，来源与本项目的实际风险如下（均已核实依赖链）：
+
+| 依赖链 | 级别 | 说明 |
+| --- | --- | --- |
+| `office-addin-dev-certs → mkcert → node-forge` | high | **仅开发期**用于生成本地 HTTPS 开发证书，不参与运行时转换 |
+| `pptxgenjs → image-size` | high | 解析图片头尺寸；本项目只把**自己渲染出的 PNG** 交给它，不处理外部图片 |
+| `exceljs → uuid` | moderate | ExcelJS 内部 ID 生成 |
+
+上游尚未发布修复版本；由于服务只监听回环地址、不处理不可信网络输入，这些告警不影响本机使用。
+如果你的部署会暴露到局域网，请优先把 `pptxgenjs`/`exceljs` 换成受控版本或加一层输入隔离。
+
 ## 测试
 
 ```bash

@@ -1,7 +1,7 @@
 /** PowerPoint 拆分：每 N 张 / 幻灯片范围。 */
 import fs from "node:fs/promises";
 import path from "node:path";
-import { OoxmlPackage, serializeContentTypes, resolvePartTarget } from "../ooxml/package.js";
+import { OoxmlPackage, serializeContentTypes } from "../ooxml/package.js";
 import { garbageCollect } from "../ooxml/gc.js";
 import { AppError } from "../errors.js";
 import { baseName, uniquePath } from "../paths.js";
@@ -84,6 +84,5 @@ export async function splitPptx({ inputPath, outputDir, strategy = "every-n-slid
     files.push({ name: path.basename(target), path: target, kind: "pptx" });
     progress?.(0.1 + 0.85 * ((i + 1) / groups.length), `生成 ${path.basename(target)}`);
   }
-  void resolvePartTarget;
   return { files };
 }

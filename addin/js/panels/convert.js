@@ -2,7 +2,7 @@
 import { runPickerJob, runJob } from "../jobflow.js";
 import { createFilePicker, $, toast } from "../components.js";
 import { exportCurrentToPdf, officeState, hostKey } from "../office-bridge.js";
-import { saveBlob, api, triggerDownload } from "../api.js";
+import { saveBlob, api, triggerDownload, savedFileUrl } from "../api.js";
 import { t } from "../i18n.js";
 
 export function initConvertPanel() {
@@ -69,7 +69,7 @@ export function initConvertPanel() {
       const dl = document.createElement("button");
       dl.className = "btn btn-small";
       dl.textContent = t("res.download");
-      dl.onclick = () => triggerDownload(saved.downloadUrl || api.downloadFallback?.(file), name);
+      dl.onclick = () => triggerDownload(file.downloadId ? savedFileUrl(file.downloadId) : undefined, file.name || name);
       const op = document.createElement("button");
       op.className = "btn btn-small btn-ghost";
       op.textContent = t("res.open");

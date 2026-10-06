@@ -1,6 +1,6 @@
 /** 任务流：上传 → 轮询 → 渲染结果，并统一处理按钮禁用与错误提示。 */
 import { startJob, waitJob } from "./api.js";
-import { progressFor, renderResult, renderGallery, toast, $ } from "./components.js";
+import { progressFor, renderResult, renderGallery, toast, $ } from "./components.js"; // eslint-disable-line no-unused-vars
 import { t } from "./i18n.js";
 
 let running = 0;
@@ -68,10 +68,6 @@ export async function runPickerJob(cfg) {
     return null;
   }
   return runJob({ ...cfg, files });
-}
-
-export function bindBusyState(selectorRoot = document) {
-  return selectorRoot;
 }
 
 export { $ };

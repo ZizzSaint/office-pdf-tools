@@ -39,8 +39,6 @@ function copySheetRows(srcSheet, dstWorkbook, name, { from = 1, to = null, withH
 }
 
 export async function splitXlsx({ inputPath, outputDir, strategy = "sheets", param, progress }) {
-  const { inputPaths } = { inputPaths: [inputPath] };
-  void inputPaths;
   const wb = await loadWorkbook(inputPath);
   if (!wb.worksheets.length) throw new AppError("工作簿中没有工作表。", { status: 400, code: "bad-request" });
   const stem = baseName(inputPath);

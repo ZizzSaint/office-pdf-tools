@@ -122,6 +122,11 @@ export function fileUrl(jobId, index = 0) {
   return `${baseUrl}/api/jobs/${jobId}/result/${index}`;
 }
 
+/** /api/files/save 保存后的下载地址。 */
+export function savedFileUrl(downloadId) {
+  return `${baseUrl}/api/files/${downloadId}/download`;
+}
+
 export function zipUrl(jobId) {
   return `${baseUrl}/api/jobs/${jobId}/archive`;
 }

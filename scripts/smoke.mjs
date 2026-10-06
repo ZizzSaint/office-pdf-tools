@@ -11,12 +11,10 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 import os from "node:os";
-import { fileURLToPath } from "node:url";
 import { createApp } from "../server/app.js";
 import { config } from "../server/config.js";
 import { detectEngines } from "../server/lib/engines/detect.js";
 
-const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const results = [];
 
 async function main() {
@@ -221,10 +219,7 @@ async function step(name, fn) {
   }
 }
 
-main().catch(async (err) => {
+main().catch((err) => {
   console.error("冒烟测试异常:", err);
-  const { jobStore } = await import("../server/lib/jobs.js");
-  void jobStore;
   process.exit(1);
 });
-void ROOT;

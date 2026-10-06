@@ -24,7 +24,7 @@
     "start": "node server/index.js",
     "https": "node server/index.js --https",
     "dev": "node server/index.js --https --dev",
-    "test": "node --test --test-concurrency=1 \"tests/*.test.js\"",
+    "test": "node scripts/run-tests.mjs",
     "smoke": "node scripts/smoke.mjs",
     "gen:icons": "node scripts/gen-icons.mjs",
     "sideload": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/sideload.ps1",
