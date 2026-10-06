@@ -3,10 +3,10 @@
   在 Windows 桌面版 Office（Word / Excel / PowerPoint）中侧载本加载项。
 
 .DESCRIPTION
-  采用“开发者侧载”注册表方式：在
+  采用「开发者侧载」注册表方式：在
     HKCU\Software\Microsoft\Office\16.0\Wef\Developer
   下写入一个值，值为 manifest.xml 的完整路径。
-  写入后重启 Office，即可在“PDF 工具”选项卡看到按钮（也可在 插入 → 我的加载项 中找到）。
+  写入后重启 Office，即可在「PDF 工具」选项卡看到按钮（也可在 插入 → 我的加载项 中找到）。
 
   需要先启动本地服务：npm run https
 
@@ -61,11 +61,11 @@ catch {
 
 if ($SharedFolder) {
   # 共享文件夹 + 受信任目录 方式
-  $share = Join-Path $env:USERPROFILE 'OfficeAddinShare'
+  $share = Join-Path ([Environment]::GetFolderPath('UserProfile')) 'OfficeAddinShare'
   New-Item -ItemType Directory -Force -Path $share | Out-Null
   Copy-Item -LiteralPath $ManifestPath -Destination (Join-Path $share 'manifest.xml') -Force
   Write-Host "已复制到共享目录: $share" -ForegroundColor Green
-  Write-Host "接下来在 Office 中：文件 → 选项 → 信任中心 → 信任中心设置 → 受信任的加载项目录，添加该目录（勾选“显示在菜单中”），"
+  Write-Host "接下来在 Office 中：文件 → 选项 → 信任中心 → 信任中心设置 → 受信任的加载项目录，添加该目录（勾选「显示在菜单中」），"
   Write-Host "然后重启 Office，在 插入 → 我的加载项 → 共享文件夹 中插入本加载项。"
   exit 0
 }
@@ -81,6 +81,6 @@ Write-Host "  值数据: $ManifestPath"
 Write-Host ""
 Write-Host "接下来：" -ForegroundColor Cyan
 Write-Host "  1. 完全退出并重新打开 Word / Excel / PowerPoint（托盘里不能有残留进程）"
-Write-Host "  2. 新建或打开文档，在功能区找到 “PDF 工具” 选项卡"
+Write-Host "  2. 新建或打开文档，在功能区找到 「PDF 工具」 选项卡"
 Write-Host "  3. 若未出现，检查 文件 → 选项 → 信任中心 → 受信任的加载项目录，确认允许加载项"
 Write-Host "  卸载：npm run unsideload"

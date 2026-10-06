@@ -12,10 +12,24 @@
   <img alt="license" src="https://img.shields.io/badge/license-MIT-blue">
   <img alt="node" src="https://img.shields.io/badge/node-%3E%3D22.13-brightgreen">
   <img alt="office" src="https://img.shields.io/badge/Office-Word%20%7C%20Excel%20%7C%20PowerPoint-d83b01">
-  <img alt="tests" src="https://img.shields.io/badge/tests-32%20passed-success">
+  <img alt="tests" src="https://img.shields.io/badge/tests-40%20passed-success">
 </p>
 
 ---
+
+## 两种用法
+
+| | 🖥️ **桌面安装包（推荐）** | 🛠️ 开发者模式（源码运行） |
+| --- | --- | --- |
+| 适合 | 普通用户、办公电脑 | 二次开发、改代码 |
+| 需要 Node.js | ❌ 安装包自带运行时 | ✅ Node ≥ 22.13 |
+| 安装方式 | 双击 `office-pdf-tools-<版本>-setup.exe` | `npm install && npm run https && npm run sideload` |
+| **Office 自动加载** | ✅ 装完即生效，之后每次打开 Word/Excel/PowerPoint 都在 | ✅（写同一个注册表项） |
+| 服务常驻 | ✅ 托盘程序随登录自启，无需手动开 | ❌ 每次手动 `npm run https` |
+| 卸载 | 开始菜单 → 卸载（或“应用和功能”） | `npm run unsideload` |
+| 文档 | [docs/DESKTOP-APP.md](docs/DESKTOP-APP.md) | [docs/INSTALL.md](docs/INSTALL.md) |
+
+一句话：**安装包装一次，Office 就永久自动加载；不需要每次开机手动启动任何东西。**
 
 ## 功能一览
 
@@ -70,7 +84,7 @@
   - **LibreOffice**：跨平台，设置 `SOFFICE_PATH` 或安装到默认位置即可
 - 若两者都没有：**“当前文档 → PDF”依旧可用**（由 Office 本体完成），其余 PDF 相关功能也不受影响
 
-### 2. 安装与启动
+### 2. 开发者方式：安装与启动
 
 ```bash
 git clone https://github.com/ZizzSaint/office-pdf-tools.git
@@ -119,11 +133,14 @@ npm run sideload        # 写入开发者侧载注册表项
 | `npm run https` | HTTPS 启动（Office 加载项必须；默认端口 3000） |
 | `npm start` | HTTP 启动（仅 API 调试） |
 | `npm run dev` | HTTPS + 关闭静态资源缓存，便于改前端 |
-| `npm test` | 运行全部测试（32 项，含真实 Office/PDF 转换） |
+| `npm test` | 运行全部测试（40 项，含真实 Office/PDF 转换与安装包自检） |
 | `npm run smoke` | 端到端冒烟：自动造样例 → 跑通 12 条链路 → 打印结果表 |
-| `npm run sideload` / `unsideload` | Windows 侧载 / 取消侧载 |
+| `npm run sideload` / `unsideload` | Windows 侧载 / 取消侧载（手动方式） |
+| `npm run build:installer` | 构建 Windows 桌面安装包（自解压 EXE + ZIP），见 [docs/DESKTOP-APP.md](docs/DESKTOP-APP.md) |
+| `npm run install:app` / `uninstall:app` | 在本机安装 / 卸载桌面版（等价于运行安装包脚本） |
 | `npm run validate:manifest` | 用微软官方校验网关校验 `manifest/manifest.xml` |
 | `npm run set:port -- 3001` | 修改端口并同步清单、文档、脚本中的 URL |
+| `npm run set:url -- https://pdf.example.com` | 把加载项地址改为公网域名（集中部署用） |
 | `npm run gen:icons` | 重新生成 16/32/64/80/128 图标 |
 | `npm run publish:github` | 把项目发布到 GitHub（见 [docs/PUBLISH.md](docs/PUBLISH.md)） |
 
@@ -204,7 +221,7 @@ office-pdf-tools/
 npm test
 ```
 
-32 项测试覆盖：页码范围解析、PDF 版面重建（行/段落/标题/表格/列聚类）、图片↔PDF、PDF 拆分合并、Word/Excel/PowerPoint 的合并与拆分（含关系搬迁校验）、清单结构与 i18n 一致性、REST API 全流程（上传/轮询/下载/打包/CSRF）、**真实的 Office → PDF 转换**（本机有 Office 或 LibreOffice 时才执行）。
+40 项测试覆盖：页码范围解析、PDF 版面重建（行/段落/标题/表格/列聚类）、图片↔PDF、PDF 拆分合并、Word/Excel/PowerPoint 的合并与拆分（含关系搬迁校验）、清单结构与 i18n 一致性、REST API 全流程（上传/轮询/下载/打包/CSRF）、**真实的 Office → PDF 转换**（本机有 Office 或 LibreOffice 时才执行）、以及**桌面安装包的安装/卸载自检**（PowerShell 语法、DryRun 无副作用、清单端口改写、托盘约定）。
 
 ## English summary
 

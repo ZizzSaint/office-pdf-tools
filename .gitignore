@@ -10,3 +10,4 @@ Thumbs.db
 .idea/
 samples/generated/
 coverage/
+dist/

@@ -3,6 +3,10 @@
 本加载项是标准的 Office Web Add-in（任务窗格 + Add-in Commands），通过 `manifest/manifest.xml` 载入；
 一份清单同时声明了 **Word（Document）/ Excel（Workbook）/ PowerPoint（Presentation）** 三个宿主。
 
+> **普通用户请看 [桌面版安装包](DESKTOP-APP.md)**：双击 `setup.exe` 即可，
+> 自带 Node 运行时、自动生成证书、注册 Office 自动加载与登录自启，装完不用做任何配置。
+> 下面这份文档面向**开发者**（从源码运行、手动侧载）。
+
 ## 0. 前置条件
 
 1. 安装 Node.js ≥ 18.17

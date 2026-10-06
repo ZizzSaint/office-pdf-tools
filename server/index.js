@@ -2,6 +2,8 @@
 /** 服务入口。 */
 import http from "node:http";
 import https from "node:https";
+import fs from "node:fs/promises";
+import path from "node:path";
 import { config } from "./config.js";
 import { createApp } from "./app.js";
 import { log } from "./lib/logger.js";
@@ -11,6 +13,24 @@ import { jobStore } from "./lib/jobs.js";
 import { cleanupRegistry } from "./lib/registry.js";
 
 async function httpsOptions() {
+  // 1) 安装版：直接读取安装目录里的证书
+  if (config.tlsKey && config.tlsCert) {
+    try {
+      const [key, cert] = await Promise.all([fs.readFile(config.tlsKey), fs.readFile(config.tlsCert)]);
+      log.info(`已加载安装目录证书: ${path.basename(config.tlsCert)}`);
+      return { key, cert };
+    } catch (err) {
+      log.warn("读取安装目录证书失败，回退到开发证书:", err?.message || err);
+    }
+  }
+  if (config.tlsPfx) {
+    try {
+      return { pfx: await fs.readFile(config.tlsPfx), passphrase: config.tlsPassphrase || undefined };
+    } catch (err) {
+      log.warn("读取 PFX 失败，回退到开发证书:", err?.message || err);
+    }
+  }
+  // 2) 开发模式：office-addin-dev-certs（自动生成并信任 localhost 证书）
   try {
     const { getHttpsServerOptions } = await import("office-addin-dev-certs");
     const options = await getHttpsServerOptions();
