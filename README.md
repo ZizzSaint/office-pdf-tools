@@ -23,7 +23,7 @@
 | --- | --- | --- |
 | 适合 | 普通用户、办公电脑 | 二次开发、改代码 |
 | 需要 Node.js | ❌ 安装包自带运行时 | ✅ Node ≥ 22.13 |
-| 安装方式 | 双击 `office-pdf-tools-<版本>-setup.exe` | `npm install && npm run https && npm run sideload` |
+| 安装方式 | 从 [Releases](https://github.com/ZizzSaint/office-pdf-tools/releases) 下载 `office-pdf-tools-<版本>-setup.exe` 双击安装 | `npm install && npm run https && npm run sideload` |
 | **Office 自动加载** | ✅ 装完即生效，之后每次打开 Word/Excel/PowerPoint 都在 | ✅（写同一个注册表项） |
 | 服务常驻 | ✅ 托盘程序随登录自启，无需手动开 | ❌ 每次手动 `npm run https` |
 | 卸载 | 开始菜单 → 卸载（或“应用和功能”） | `npm run unsideload` |

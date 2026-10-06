@@ -153,7 +153,10 @@ test("卸载脚本：省略 -InstallDir 时从自身位置推断安装目录", {
   ]);
   assert.equal(result.status, 0, `卸载脚本失败:\n${result.stdout}\n${result.stderr}`);
   const output = result.stdout + result.stderr;
-  assert.ok(output.includes(installDir), `应推断出安装目录 ${installDir}，实际输出:\n${output}`);
+  // 注意：Windows 上 os.tmpdir() 可能返回 8.3 短路径（如 RUNNER~1），
+  // 而脚本内部用 GetFullPath 解析成长路径，所以按目录名断言而不是按绝对路径。
+  assert.ok(output.includes(path.basename(dir)), `应推断出安装目录（含 ${path.basename(dir)}），实际输出:\n${output}`);
+  assert.ok(output.includes("OfficePdfTools"), "应显示安装目录名");
   assert.ok(await fs.stat(installDir).then(() => true), "DryRun 不应删除目录");
 });
 
