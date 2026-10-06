@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Office PDF 工具</title>
+  <link rel="stylesheet" href="css/style.css"/>
+  <script src="https://appsforoffice.microsoft.com/lib/1/hosted/office.js"></script>
+</head>
+<body>
+  <div class="app">
+    <header class="app-header">
+      <div class="brand">
+        <img src="assets/icon-32.png" alt="" class="brand-logo"/>
+        <div class="brand-text">
+          <h1 data-i18n="app.title">Office PDF 工具</h1>
+          <p class="host-line"><span id="hostBadge" class="badge" data-i18n="app.hostDetecting">检测中…</span></p>
+        </div>
+      </div>
+      <div class="header-actions">
+        <button id="langToggle" class="icon-btn" title="语言 / Language">中/EN</button>
+        <span id="serverDot" class="dot dot-unknown" title="服务状态"></span>
+      </div>
+    </header>
+
+    <nav class="tabs" id="tabs">
+      <button class="tab" data-tab="convert" data-i18n="tab.convert">转换</button>
+      <button class="tab" data-tab="images" data-i18n="tab.images">图片 / PDF</button>
+      <button class="tab" data-tab="splitmerge" data-i18n="tab.splitmerge">拆分合并</button>
+      <button class="tab" data-tab="settings" data-i18n="tab.settings">设置</button>
+    </nav>
+
+    <main class="panels">
+      <!-- ============================== 转换 ============================== -->
+      <section class="panel" id="panel-convert">
+        <article class="card card-primary">
+          <h2 data-i18n="convert.current.title">当前文档 → PDF</h2>
+          <p class="muted" data-i18n="convert.current.desc">使用 Office 原生导出，保留字体与排版，无需上传。</p>
+          <div class="row">
+            <button id="btnCurrentToPdf" class="btn btn-primary" data-i18n="convert.current.action">导出当前文档为 PDF</button>
+          </div>
+          <label class="check">
+            <input type="checkbox" id="chkOpenAfter" checked/>
+            <span data-i18n="convert.current.openAfter">导出后自动打开 PDF</span>
+          </label>
+          <div id="currentResult" class="result hidden"></div>
+        </article>
+
+        <article class="card" id="cardFileToPdf">
+          <h2 data-i18n="convert.file.title">本地文件 → PDF</h2>
+          <p class="muted" data-i18n="convert.file.desc">支持 Word / Excel / PowerPoint / ODF / RTF / TXT / CSV / HTML 等，由服务端引擎批量转换。</p>
+          <div class="dropzone" id="dzOfficeToPdf" data-i18n="dropzone.hint">点击选择文件，或把文件拖到这里</div>
+          <input type="file" id="inOfficeToPdf" multiple accept=".doc,.docx,.docm,.dot,.dotx,.rtf,.odt,.xls,.xlsx,.xlsm,.xlsb,.ods,.csv,.ppt,.pptx,.pptm,.odp,.txt,.html,.htm,.xml" hidden/>
+          <div class="filelist" id="listOfficeToPdf"></div>
+          <details class="advanced">
+            <summary data-i18n="common.advanced">高级选项</summary>
+            <div class="grid2">
+              <label><span data-i18n="convert.engine">转换引擎</span>
+                <select id="selEngine">
+                  <option value="auto" data-i18n="convert.engine.auto">自动</option>
+                  <option value="msoffice" data-i18n="convert.engine.ms">Microsoft Office</option>
+                  <option value="libreoffice" data-i18n="convert.engine.lo">LibreOffice</option>
+                </select>
+              </label>
+              <label><span data-i18n="convert.sheet">仅导出工作表(Excel)</span>
+                <input type="text" id="inSheet" placeholder="Sheet1"/>
+              </label>
+            </div>
+          </details>
+          <div class="row">
+            <button id="btnOfficeToPdf" class="btn btn-primary" data-i18n="convert.file.action">开始转换</button>
+          </div>
+          <div class="progress hidden" id="progOfficeToPdf"><div class="bar"></div><span class="progress-text"></span></div>
+          <div class="result hidden" id="resOfficeToPdf"></div>
+        </article>
+
+        <article class="card" id="cardPdfToOffice">
+          <h2 data-i18n="convert.pdf.title">PDF → Office / 图片</h2>
+          <p class="muted" data-i18n="convert.pdf.desc">文本模式尽量还原可编辑内容；图片模式逐页渲染，版式 100% 保真。</p>
+          <div class="dropzone" id="dzPdfToOffice" data-i18n="dropzone.hintPdf">点击选择 PDF，或拖拽到这里</div>
+          <input type="file" id="inPdfToOffice" accept=".pdf" hidden/>
+          <div class="filelist" id="listPdfToOffice"></div>
+          <div class="grid2">
+            <label><span data-i18n="convert.pdf.target">目标格式</span>
+              <select id="selPdfTarget">
+                <option value="docx" data-i18n="fmt.docx">Word (.docx)</option>
+                <option value="xlsx" data-i18n="fmt.xlsx">Excel (.xlsx)</option>
+                <option value="pptx" data-i18n="fmt.pptx">PowerPoint (.pptx)</option>
+                <option value="png">PNG</option>
+                <option value="jpeg">JPEG</option>
+              </select>
+            </label>
+            <label><span data-i18n="convert.pdf.mode">转换模式</span>
+              <select id="selPdfMode">
+                <option value="text" data-i18n="convert.pdf.mode.text">文本（可编辑）</option>
+                <option value="raster" data-i18n="convert.pdf.mode.raster">图片（高保真）</option>
+              </select>
+            </label>
+          </div>
+          <div class="grid2">
+            <label><span data-i18n="common.pages">页码范围</span>
+              <input type="text" id="inPdfPages" placeholder="1-3,5,8-"/></label>
+            <label><span data-i18n="common.dpi">分辨率 DPI</span>
+              <input type="number" id="inPdfDpi" value="150" min="36" max="600" step="6"/></label>
+          </div>
+          <div class="row">
+            <button id="btnPdfToOffice" class="btn btn-primary" data-i18n="convert.pdf.action">开始转换</button>
+          </div>
+          <div class="progress hidden" id="progPdfToOffice"><div class="bar"></div><span class="progress-text"></span></div>
+          <div class="result hidden" id="resPdfToOffice"></div>
+          <div class="gallery" id="galleryPdfToOffice"></div>
+        </article>
+      </section>
+
+      <!-- ============================ 图片 / PDF ============================ -->
+      <section class="panel" id="panel-images">
+        <article class="card">
+          <h2 data-i18n="images.toPdf.title">图片 → PDF</h2>
+          <p class="muted" data-i18n="images.toPdf.desc">支持 PNG / JPG / WebP / GIF / BMP / TIFF，可调整顺序、页面尺寸与每页张数。</p>
+          <div class="dropzone" id="dzImages" data-i18n="dropzone.hintImages">点击选择图片，或拖拽到这里</div>
+          <input type="file" id="inImages" accept="image/*" multiple hidden/>
+          <div class="filelist sortable" id="listImages"></div>
+          <div class="grid2">
+            <label><span data-i18n="images.pageSize">页面尺寸</span>
+              <select id="selPageSize">
+                <option value="fit" data-i18n="images.pageSize.fit">适应图片</option>
+                <option value="a4" selected>A4</option>
+                <option value="a3">A3</option>
+                <option value="a5">A5</option>
+                <option value="letter">Letter</option>
+                <option value="legal">Legal</option>
+              </select>
+            </label>
+            <label><span data-i18n="images.orientation">方向</span>
+              <select id="selOrientation">
+                <option value="auto" data-i18n="images.orientation.auto">自动</option>
+                <option value="portrait" data-i18n="images.orientation.portrait">纵向</option>
+                <option value="landscape" data-i18n="images.orientation.landscape">横向</option>
+              </select>
+            </label>
+          </div>
+          <div class="grid3">
+            <label><span data-i18n="images.margin">边距 (mm)</span>
+              <input type="number" id="inMargin" value="10" min="0" max="60"/></label>
+            <label><span data-i18n="images.perPage">每页张数</span>
+              <select id="selPerPage">
+                <option value="1" selected>1</option><option value="2">2</option>
+                <option value="4">4</option><option value="6">6</option><option value="9">9</option>
+              </select></label>
+            <label><span data-i18n="images.fit">适配方式</span>
+              <select id="selFit">
+                <option value="contain" data-i18n="images.fit.contain">等比缩放(完整)</option>
+                <option value="cover" data-i18n="images.fit.cover">等比裁剪(铺满)</option>
+                <option value="stretch" data-i18n="images.fit.stretch">拉伸</option>
+              </select></label>
+          </div>
+          <label class="check"><input type="checkbox" id="chkImgSeparate"/>
+            <span data-i18n="images.separate">每张图片生成单独的 PDF（打包 ZIP）</span></label>
+          <div class="row">
+            <button id="btnImagesToPdf" class="btn btn-primary" data-i18n="images.toPdf.action">生成 PDF</button>
+          </div>
+          <div class="progress hidden" id="progImages"><div class="bar"></div><span class="progress-text"></span></div>
+          <div class="result hidden" id="resImages"></div>
+        </article>
+
+        <article class="card">
+          <h2 data-i18n="pdf.toImages.title">PDF → 图片</h2>
+          <p class="muted" data-i18n="pdf.toImages.desc">按页渲染为图片，可指定页码范围与分辨率，多页自动打包 ZIP。</p>
+          <div class="dropzone" id="dzPdfToImages" data-i18n="dropzone.hintPdf">点击选择 PDF，或拖拽到这里</div>
+          <input type="file" id="inPdfToImages" accept=".pdf" hidden/>
+          <div class="filelist" id="listPdfToImages"></div>
+          <div class="grid3">
+            <label><span data-i18n="pdf.toImages.format">格式</span>
+              <select id="selImgFormat"><option value="png">PNG</option><option value="jpeg">JPEG</option><option value="webp">WebP</option></select></label>
+            <label><span data-i18n="common.dpi">分辨率 DPI</span>
+              <input type="number" id="inImgDpi" value="150" min="36" max="600" step="6"/></label>
+            <label><span data-i18n="common.pages">页码范围</span>
+              <input type="text" id="inImgPages" placeholder="1-5"/></label>
+          </div>
+          <div class="row">
+            <button id="btnPdfToImages" class="btn btn-primary" data-i18n="pdf.toImages.action">导出图片</button>
+          </div>
+          <div class="progress hidden" id="progPdfToImages"><div class="bar"></div><span class="progress-text"></span></div>
+          <div class="result hidden" id="resPdfToImages"></div>
+          <div class="gallery" id="galleryPdfToImages"></div>
+        </article>
+      </section>
+
+      <!-- ============================ 拆分合并 ============================ -->
+      <section class="panel" id="panel-splitmerge">
+        <article class="card">
+          <h2 data-i18n="merge.title">合并文档</h2>
+          <p class="muted" data-i18n="merge.desc">合并同类型文件：PDF 直接拼页；Word 追加正文；Excel 汇总工作表；PowerPoint 追加幻灯片。</p>
+          <div class="dropzone" id="dzMerge" data-i18n="dropzone.hintMerge">点击选择多个同类型文件，或拖拽到这里</div>
+          <input type="file" id="inMerge" multiple hidden
+             accept=".pdf,.docx,.docm,.xlsx,.xlsm,.pptx,.pptm"/>
+          <div class="filelist sortable" id="listMerge"></div>
+          <div class="grid2">
+            <label><span data-i18n="merge.kind">文件类型</span>
+              <select id="selMergeKind">
+                <option value="auto" data-i18n="common.auto">自动识别</option>
+                <option value="pdf">PDF</option>
+                <option value="docx">Word (.docx)</option>
+                <option value="xlsx">Excel (.xlsx)</option>
+                <option value="pptx">PowerPoint (.pptx)</option>
+              </select></label>
+            <label><span data-i18n="merge.outputName">输出文件名</span>
+              <input type="text" id="inMergeName" placeholder="merged"/></label>
+          </div>
+          <label class="check"><input type="checkbox" id="chkMergePageBreak" checked/>
+            <span data-i18n="merge.pageBreak">Word：每个文档之间插入分页符</span></label>
+          <div class="row">
+            <button id="btnMerge" class="btn btn-primary" data-i18n="merge.action">合并</button>
+          </div>
+          <div class="progress hidden" id="progMerge"><div class="bar"></div><span class="progress-text"></span></div>
+          <div class="result hidden" id="resMerge"></div>
+        </article>
+
+        <article class="card">
+          <h2 data-i18n="split.title">拆分文档</h2>
+          <p class="muted" data-i18n="split.desc">PDF 按页；Word 按标题或分节符；Excel 按工作表或行数；PowerPoint 按幻灯片。</p>
+          <div class="dropzone" id="dzSplit" data-i18n="dropzone.hintSplit">点击选择要拆分的文件，或拖拽到这里</div>
+          <input type="file" id="inSplit" accept=".pdf,.docx,.docm,.xlsx,.xlsm,.pptx,.pptm" hidden/>
+          <div class="filelist" id="listSplit"></div>
+          <div class="grid2">
+            <label><span data-i18n="split.strategy">拆分方式</span>
+              <select id="selSplitStrategy"></select></label>
+            <label><span id="splitParamLabel" data-i18n="split.param">参数</span>
+              <input type="text" id="inSplitParam" placeholder="1"/></label>
+          </div>
+          <p class="muted small" id="splitHint"></p>
+          <div class="row">
+            <button id="btnSplit" class="btn btn-primary" data-i18n="split.action">拆分（ZIP 打包）</button>
+          </div>
+          <div class="progress hidden" id="progSplit"><div class="bar"></div><span class="progress-text"></span></div>
+          <div class="result hidden" id="resSplit"></div>
+        </article>
+      </section>
+
+      <!-- ============================== 设置 ============================== -->
+      <section class="panel" id="panel-settings">
+        <article class="card">
+          <h2 data-i18n="settings.service">本地服务</h2>
+          <div class="kv"><span data-i18n="settings.address">服务地址</span><input type="text" id="inServerUrl"/></div>
+          <div class="kv"><span data-i18n="settings.outputDir">输出目录</span>
+            <input type="text" id="inOutputDir" readonly/><button id="btnOpenOutput" class="btn btn-ghost" data-i18n="settings.open">打开</button></div>
+          <div class="row">
+            <button id="btnSaveSettings" class="btn" data-i18n="settings.save">保存</button>
+            <button id="btnCheckServer" class="btn btn-ghost" data-i18n="settings.check">检测连接</button>
+          </div>
+        </article>
+        <article class="card">
+          <h2 data-i18n="settings.engines">转换引擎</h2>
+          <ul class="engine-list" id="engineList"><li class="muted" data-i18n="common.loading">加载中…</li></ul>
+        </article>
+        <article class="card">
+          <h2 data-i18n="settings.help">帮助</h2>
+          <p class="muted small" data-i18n="settings.helpText">首次使用请在项目目录运行 npm run https 启动本地服务，然后用 npm run sideload 载入加载项。</p>
+          <div class="row">
+            <button id="btnOpenDocs" class="btn btn-ghost" data-i18n="settings.docs">打开使用说明</button>
+          </div>
+          <p class="muted small" id="aboutLine"></p>
+        </article>
+      </section>
+    </main>
+
+    <div class="toast-wrap" id="toastWrap"></div>
+  </div>
+
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,306 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Office PDF 工具 / Office PDF Tools
+  一个加载项同时支持 Word、Excel、PowerPoint（Hosts 中声明 Document / Workbook / Presentation）。
+
+  开发环境默认地址为 https://localhost:3000。
+  修改端口请运行 npm run set:port （参数为端口号，例如 3001），脚本会同时重写本文件里的所有 URL。
+-->
+<OfficeApp
+  xmlns="http://schemas.microsoft.com/office/appforoffice/1.1"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:bt="http://schemas.microsoft.com/office/officeappbasictypes/1.0"
+  xmlns:ov="http://schemas.microsoft.com/office/taskpaneappversionoverrides"
+  xsi:type="TaskPaneApp">
+
+  <Id>7f3c1a58-2b46-4c9d-9f81-0d5ab6e2c734</Id>
+  <Version>1.0.0.0</Version>
+  <ProviderName>Office PDF Tools</ProviderName>
+  <DefaultLocale>zh-CN</DefaultLocale>
+  <DisplayName DefaultValue="Office PDF 工具"/>
+  <Description DefaultValue="在当前 Word / Excel / PowerPoint 中一键导出 PDF；并可完成 PDF 转 Office、PDF 转图片、图片合成 PDF、Office 文档拆分与合并。"/>
+  <IconUrl DefaultValue="https://localhost:3000/assets/icon-32.png"/>
+  <HighResolutionIconUrl DefaultValue="https://localhost:3000/assets/icon-80.png"/>
+  <SupportUrl DefaultValue="https://github.com/ZizzSaint/office-pdf-tools"/>
+  <AppDomains>
+    <AppDomain>https://localhost:3000</AppDomain>
+  </AppDomains>
+
+  <Hosts>
+    <Host Name="Document"/>
+    <Host Name="Workbook"/>
+    <Host Name="Presentation"/>
+  </Hosts>
+
+  <DefaultSettings>
+    <SourceLocation DefaultValue="https://localhost:3000/taskpane.html"/>
+  </DefaultSettings>
+
+  <Permissions>ReadWriteDocument</Permissions>
+
+  <VersionOverrides xmlns="http://schemas.microsoft.com/office/taskpaneappversionoverrides" xsi:type="VersionOverridesV1_0">
+    <Requirements>
+      <bt:Sets DefaultMinVersion="1.1">
+        <bt:Set Name="DialogApi"/>
+      </bt:Sets>
+    </Requirements>
+
+    <Hosts>
+      <!-- ============================ Word ============================ -->
+      <Host xsi:type="Document">
+        <DesktopFormFactor>
+          <FunctionFile resid="Commands.Url"/>
+          <ExtensionPoint xsi:type="PrimaryCommandSurface">
+            <CustomTab id="TabOfficePdfToolsWord">
+              <Group id="GroupOfficePdfConvertWord">
+                <Label resid="Group.Convert.Label"/>
+                <Icon>
+                  <bt:Image size="16" resid="Icon.16"/>
+                  <bt:Image size="32" resid="Icon.32"/>
+                  <bt:Image size="80" resid="Icon.80"/>
+                </Icon>
+                <Control xsi:type="Button" id="BtnWordToPdf">
+                  <Label resid="Btn.ToPdf.Label"/>
+                  <Supertip>
+                    <Title resid="Btn.ToPdf.Label"/>
+                    <Description resid="Btn.ToPdf.Tip"/>
+                  </Supertip>
+                  <Icon>
+                    <bt:Image size="16" resid="Icon.16"/>
+                    <bt:Image size="32" resid="Icon.32"/>
+                    <bt:Image size="80" resid="Icon.80"/>
+                  </Icon>
+                  <Action xsi:type="ShowTaskpane">
+                    <TaskpaneId>OfficePdfToolsPane</TaskpaneId>
+                    <SourceLocation resid="Taskpane.ToPdf.Url"/>
+                  </Action>
+                </Control>
+                <Control xsi:type="Button" id="BtnWordPdfToOffice">
+                  <Label resid="Btn.PdfToOffice.Label"/>
+                  <Supertip>
+                    <Title resid="Btn.PdfToOffice.Label"/>
+                    <Description resid="Btn.PdfToOffice.Tip"/>
+                  </Supertip>
+                  <Icon>
+                    <bt:Image size="16" resid="Icon.16"/>
+                    <bt:Image size="32" resid="Icon.32"/>
+                    <bt:Image size="80" resid="Icon.80"/>
+                  </Icon>
+                  <Action xsi:type="ShowTaskpane">
+                    <TaskpaneId>OfficePdfToolsPane</TaskpaneId>
+                    <SourceLocation resid="Taskpane.PdfToOffice.Url"/>
+                  </Action>
+                </Control>
+              </Group>
+              <Group id="GroupOfficePdfMergeWord">
+                <Label resid="Group.Merge.Label"/>
+                <Icon>
+                  <bt:Image size="16" resid="Icon.16"/>
+                  <bt:Image size="32" resid="Icon.32"/>
+                  <bt:Image size="80" resid="Icon.80"/>
+                </Icon>
+                <Control xsi:type="Button" id="BtnWordSplitMerge">
+                  <Label resid="Btn.SplitMerge.Label"/>
+                  <Supertip>
+                    <Title resid="Btn.SplitMerge.Label"/>
+                    <Description resid="Btn.SplitMerge.Tip"/>
+                  </Supertip>
+                  <Icon>
+                    <bt:Image size="16" resid="Icon.16"/>
+                    <bt:Image size="32" resid="Icon.32"/>
+                    <bt:Image size="80" resid="Icon.80"/>
+                  </Icon>
+                  <Action xsi:type="ShowTaskpane">
+                    <TaskpaneId>OfficePdfToolsPane</TaskpaneId>
+                    <SourceLocation resid="Taskpane.SplitMerge.Url"/>
+                  </Action>
+                </Control>
+              </Group>
+              <Label resid="Tab.OfficePdfTools.Label"/>
+            </CustomTab>
+          </ExtensionPoint>
+        </DesktopFormFactor>
+      </Host>
+
+      <!-- ============================ Excel ============================ -->
+      <Host xsi:type="Workbook">
+        <DesktopFormFactor>
+          <FunctionFile resid="Commands.Url"/>
+          <ExtensionPoint xsi:type="PrimaryCommandSurface">
+            <CustomTab id="TabOfficePdfToolsExcel">
+              <Group id="GroupOfficePdfConvertExcel">
+                <Label resid="Group.Convert.Label"/>
+                <Icon>
+                  <bt:Image size="16" resid="Icon.16"/>
+                  <bt:Image size="32" resid="Icon.32"/>
+                  <bt:Image size="80" resid="Icon.80"/>
+                </Icon>
+                <Control xsi:type="Button" id="BtnExcelToPdf">
+                  <Label resid="Btn.ToPdf.Label"/>
+                  <Supertip>
+                    <Title resid="Btn.ToPdf.Label"/>
+                    <Description resid="Btn.ToPdf.Tip"/>
+                  </Supertip>
+                  <Icon>
+                    <bt:Image size="16" resid="Icon.16"/>
+                    <bt:Image size="32" resid="Icon.32"/>
+                    <bt:Image size="80" resid="Icon.80"/>
+                  </Icon>
+                  <Action xsi:type="ShowTaskpane">
+                    <TaskpaneId>OfficePdfToolsPane</TaskpaneId>
+                    <SourceLocation resid="Taskpane.ToPdf.Url"/>
+                  </Action>
+                </Control>
+                <Control xsi:type="Button" id="BtnExcelPdfToOffice">
+                  <Label resid="Btn.PdfToOffice.Label"/>
+                  <Supertip>
+                    <Title resid="Btn.PdfToOffice.Label"/>
+                    <Description resid="Btn.PdfToOffice.Tip"/>
+                  </Supertip>
+                  <Icon>
+                    <bt:Image size="16" resid="Icon.16"/>
+                    <bt:Image size="32" resid="Icon.32"/>
+                    <bt:Image size="80" resid="Icon.80"/>
+                  </Icon>
+                  <Action xsi:type="ShowTaskpane">
+                    <TaskpaneId>OfficePdfToolsPane</TaskpaneId>
+                    <SourceLocation resid="Taskpane.PdfToOffice.Url"/>
+                  </Action>
+                </Control>
+              </Group>
+              <Group id="GroupOfficePdfMergeExcel">
+                <Label resid="Group.Merge.Label"/>
+                <Icon>
+                  <bt:Image size="16" resid="Icon.16"/>
+                  <bt:Image size="32" resid="Icon.32"/>
+                  <bt:Image size="80" resid="Icon.80"/>
+                </Icon>
+                <Control xsi:type="Button" id="BtnExcelSplitMerge">
+                  <Label resid="Btn.SplitMerge.Label"/>
+                  <Supertip>
+                    <Title resid="Btn.SplitMerge.Label"/>
+                    <Description resid="Btn.SplitMerge.Tip"/>
+                  </Supertip>
+                  <Icon>
+                    <bt:Image size="16" resid="Icon.16"/>
+                    <bt:Image size="32" resid="Icon.32"/>
+                    <bt:Image size="80" resid="Icon.80"/>
+                  </Icon>
+                  <Action xsi:type="ShowTaskpane">
+                    <TaskpaneId>OfficePdfToolsPane</TaskpaneId>
+                    <SourceLocation resid="Taskpane.SplitMerge.Url"/>
+                  </Action>
+                </Control>
+              </Group>
+              <Label resid="Tab.OfficePdfTools.Label"/>
+            </CustomTab>
+          </ExtensionPoint>
+        </DesktopFormFactor>
+      </Host>
+
+      <!-- ========================== PowerPoint ========================== -->
+      <Host xsi:type="Presentation">
+        <DesktopFormFactor>
+          <FunctionFile resid="Commands.Url"/>
+          <ExtensionPoint xsi:type="PrimaryCommandSurface">
+            <CustomTab id="TabOfficePdfToolsPpt">
+              <Group id="GroupOfficePdfConvertPpt">
+                <Label resid="Group.Convert.Label"/>
+                <Icon>
+                  <bt:Image size="16" resid="Icon.16"/>
+                  <bt:Image size="32" resid="Icon.32"/>
+                  <bt:Image size="80" resid="Icon.80"/>
+                </Icon>
+                <Control xsi:type="Button" id="BtnPptToPdf">
+                  <Label resid="Btn.ToPdf.Label"/>
+                  <Supertip>
+                    <Title resid="Btn.ToPdf.Label"/>
+                    <Description resid="Btn.ToPdf.Tip"/>
+                  </Supertip>
+                  <Icon>
+                    <bt:Image size="16" resid="Icon.16"/>
+                    <bt:Image size="32" resid="Icon.32"/>
+                    <bt:Image size="80" resid="Icon.80"/>
+                  </Icon>
+                  <Action xsi:type="ShowTaskpane">
+                    <TaskpaneId>OfficePdfToolsPane</TaskpaneId>
+                    <SourceLocation resid="Taskpane.ToPdf.Url"/>
+                  </Action>
+                </Control>
+                <Control xsi:type="Button" id="BtnPptPdfToOffice">
+                  <Label resid="Btn.PdfToOffice.Label"/>
+                  <Supertip>
+                    <Title resid="Btn.PdfToOffice.Label"/>
+                    <Description resid="Btn.PdfToOffice.Tip"/>
+                  </Supertip>
+                  <Icon>
+                    <bt:Image size="16" resid="Icon.16"/>
+                    <bt:Image size="32" resid="Icon.32"/>
+                    <bt:Image size="80" resid="Icon.80"/>
+                  </Icon>
+                  <Action xsi:type="ShowTaskpane">
+                    <TaskpaneId>OfficePdfToolsPane</TaskpaneId>
+                    <SourceLocation resid="Taskpane.PdfToOffice.Url"/>
+                  </Action>
+                </Control>
+              </Group>
+              <Group id="GroupOfficePdfMergePpt">
+                <Label resid="Group.Merge.Label"/>
+                <Icon>
+                  <bt:Image size="16" resid="Icon.16"/>
+                  <bt:Image size="32" resid="Icon.32"/>
+                  <bt:Image size="80" resid="Icon.80"/>
+                </Icon>
+                <Control xsi:type="Button" id="BtnPptSplitMerge">
+                  <Label resid="Btn.SplitMerge.Label"/>
+                  <Supertip>
+                    <Title resid="Btn.SplitMerge.Label"/>
+                    <Description resid="Btn.SplitMerge.Tip"/>
+                  </Supertip>
+                  <Icon>
+                    <bt:Image size="16" resid="Icon.16"/>
+                    <bt:Image size="32" resid="Icon.32"/>
+                    <bt:Image size="80" resid="Icon.80"/>
+                  </Icon>
+                  <Action xsi:type="ShowTaskpane">
+                    <TaskpaneId>OfficePdfToolsPane</TaskpaneId>
+                    <SourceLocation resid="Taskpane.SplitMerge.Url"/>
+                  </Action>
+                </Control>
+              </Group>
+              <Label resid="Tab.OfficePdfTools.Label"/>
+            </CustomTab>
+          </ExtensionPoint>
+        </DesktopFormFactor>
+      </Host>
+    </Hosts>
+
+    <Resources>
+      <bt:Images>
+        <bt:Image id="Icon.16" DefaultValue="https://localhost:3000/assets/icon-16.png"/>
+        <bt:Image id="Icon.32" DefaultValue="https://localhost:3000/assets/icon-32.png"/>
+        <bt:Image id="Icon.80" DefaultValue="https://localhost:3000/assets/icon-80.png"/>
+      </bt:Images>
+      <bt:Urls>
+        <bt:Url id="Commands.Url" DefaultValue="https://localhost:3000/commands.html"/>
+        <bt:Url id="Taskpane.Url" DefaultValue="https://localhost:3000/taskpane.html"/>
+        <bt:Url id="Taskpane.ToPdf.Url" DefaultValue="https://localhost:3000/taskpane.html#to-pdf"/>
+        <bt:Url id="Taskpane.PdfToOffice.Url" DefaultValue="https://localhost:3000/taskpane.html#pdf-to-office"/>
+        <bt:Url id="Taskpane.SplitMerge.Url" DefaultValue="https://localhost:3000/taskpane.html#split-merge"/>
+      </bt:Urls>
+      <bt:ShortStrings>
+        <bt:String id="Tab.OfficePdfTools.Label" DefaultValue="PDF 工具"/>
+        <bt:String id="Group.Convert.Label" DefaultValue="转换为 PDF"/>
+        <bt:String id="Group.Merge.Label" DefaultValue="拆分 / 合并"/>
+        <bt:String id="Btn.ToPdf.Label" DefaultValue="导出 PDF"/>
+        <bt:String id="Btn.PdfToOffice.Label" DefaultValue="PDF 转换"/>
+        <bt:String id="Btn.SplitMerge.Label" DefaultValue="拆分合并"/>
+      </bt:ShortStrings>
+      <bt:LongStrings>
+        <bt:String id="Btn.ToPdf.Tip" DefaultValue="打开 Office PDF 工具窗格，把当前文档一键导出为 PDF。"/>
+        <bt:String id="Btn.PdfToOffice.Tip" DefaultValue="把 PDF 转成 Word / Excel / PowerPoint / 图片，或把图片合成为 PDF。"/>
+        <bt:String id="Btn.SplitMerge.Tip" DefaultValue="按页/按标题/按工作表/按幻灯片拆分文档，或把多个文档合并为一个。"/>
+      </bt:LongStrings>
+    </Resources>
+  </VersionOverrides>
+</OfficeApp>

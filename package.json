@@ -1,0 +1,50 @@
+{
+  "name": "office-pdf-tools",
+  "version": "1.0.0",
+  "private": false,
+  "description": "Office 加载项 + 本地服务：Word/Excel/PowerPoint ⇄ PDF 互转、图片转 PDF、PDF 转图片、Office 文档拆分与合并。Office add-in + local service for Office⇄PDF conversion, images↔PDF, and document split/merge.",
+  "keywords": [
+    "office-addin",
+    "word",
+    "excel",
+    "powerpoint",
+    "pdf",
+    "converter",
+    "merge",
+    "split",
+    "officejs"
+  ],
+  "type": "module",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.17"
+  },
+  "main": "server/index.js",
+  "scripts": {
+    "start": "node server/index.js",
+    "https": "node server/index.js --https",
+    "dev": "node server/index.js --https --dev",
+    "test": "node --test --test-concurrency=1 \"tests/*.test.js\"",
+    "smoke": "node scripts/smoke.mjs",
+    "gen:icons": "node scripts/gen-icons.mjs",
+    "sideload": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/sideload.ps1",
+    "unsideload": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/unsideload.ps1",
+    "validate:manifest": "office-addin-manifest validate manifest/manifest.xml",
+    "publish:github": "node scripts/publish-github.mjs"
+  },
+  "dependencies": {
+    "@napi-rs/canvas": "^1.0.10",
+    "docx": "^9.8.1",
+    "exceljs": "^4.4.0",
+    "express": "^5.2.1",
+    "jszip": "^3.10.2",
+    "multer": "^2.4.0",
+    "office-addin-dev-certs": "^3.0.1",
+    "pdf-lib": "^1.17.1",
+    "pdfjs-dist": "^6.4.299",
+    "pptxgenjs": "^4.0.1"
+  },
+  "devDependencies": {
+    "office-addin-manifest": "^3.0.1"
+  }
+}
